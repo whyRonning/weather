@@ -1,26 +1,43 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, {Dispatch, useEffect} from 'react';
+import {Redirect, Route, Switch} from 'react-router-dom';
 import './App.css';
+import {WeatherContainer} from "./components/weather/weatherContainer";
+import {HeaderContainer} from "./components/header/headerContainer";
+import {Main} from "./components/main/main";
+import {LoginContainer} from "./components/login and profile/loginContainer";
+import {actionCreators} from "./store/loginReducer";
+import { Logout } from './components/login and profile/logout';
+import {Profile} from "./components/login and profile/profile";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+type props = {
+    dispatch: Dispatch<any>,
+    isAuth:boolean,
+    login:string
 }
+let App = (props: props) => {
+    let dispatch=props.dispatch;
+    useEffect(() => {
+        if (localStorage.getItem("auth") === "true") {
+          dispatch(actionCreators.authAC())
+        }else{
+          localStorage.setItem("auth","false")
+        }
+    }, [dispatch]);
+    return (
+        <div>
+            <HeaderContainer/>
+            <main>
+                <Switch>
+                    <Route exact path={"/"} component={Main}/>
+                    <Route exact path={"/profile"} component={()=><Profile login={props.login} isAuth={props.isAuth}/>}/>
+                    <Route exact path={"/login"} component={LoginContainer}/>
+                    <Route exact path={"/weather"} component={WeatherContainer}/>
+                  <Route exact path={"/logout"} component={()=><Logout dispatch={dispatch} logoutAC={actionCreators.logoutAC}/>}/>
+                    <Route> <Redirect to="/"/></Route>
+                </Switch>
+            </main>
+        </div>
+    )
+};
 
 export default App;
