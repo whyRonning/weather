@@ -6,6 +6,7 @@ type props={
     login:string
 }
 export let Profile=(props:props)=>{
+    console.log(props.isAuth)
     if(props.isAuth){
         return (
             <p>Логин-{props.login}</p>
@@ -13,4 +14,4 @@ export let Profile=(props:props)=>{
     }else {
         return <Redirect to={"/login"}/>
     }
-}
+};

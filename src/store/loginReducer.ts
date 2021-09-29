@@ -12,13 +12,7 @@ type actionTypes=ActionTypes<typeof actionCreators>;
 export let loginReducer=(state=data, action:actionTypes)=>{
     switch (action.type) {
         case "checkLoginData":{
-            if (state.loginData.login===action.login && state.loginData.password===action.password){
-                localStorage.setItem("auth","true");
-                return {...state,isAuth:true}
-            }
-            else{
-                return state
-            }
+            return {...state,isAuth:true}
         }
         case "auth":{
             localStorage.setItem("auth","true");

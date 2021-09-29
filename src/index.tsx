@@ -1,16 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
 import reportWebVitals from './reportWebVitals';
 import {BrowserRouter} from "react-router-dom";
 import {Provider} from "react-redux";
+import "antd/dist/antd.css";
 import {store} from "./store/store";
+import { AppContainer } from './AppContainer';
 ReactDOM.render(
     <React.StrictMode>
         <BrowserRouter>
             <Provider store={store}>
-                <App isAuth={store.getState().loginReducer.isAuth} login={store.getState().loginReducer.loginData.login} dispatch={store.dispatch} />
+                <AppContainer />
             </Provider>
         </BrowserRouter>
     </React.StrictMode>,
