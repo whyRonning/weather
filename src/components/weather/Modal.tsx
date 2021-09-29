@@ -2,6 +2,7 @@ import React, {useState} from "react";
 import {FindStroke} from "./findStroke";
 import {citiesType} from "../../store/weatherReducer";
 import { City } from "./city";
+import styled from "styled-components";
 
 type props = {
     className?: string,
@@ -10,6 +11,23 @@ type props = {
     cities:citiesType,
     cityButtHandler:(city:string)=>void
 }
+let Cancel=styled.span`
+  cursor:pointer;
+  margin-left:95vw;
+  margin-left:95vw;
+  font-size:3vmin;
+    
+`;
+let Block=styled.div`
+    width:100%;
+`;
+let CitiesTitlesBlock=styled.div`
+    display:grid;
+    width:35vw;
+    margin-left:35vw;
+    grid-gap:.8vw;
+    grid-template-columns:repeat(3,1fr)
+`;
 export let Modal = (props: props) => {
     let [findStrokeText, setFindStrokeText] = useState("");
     let [FilteredCities,setFilteredCities]=useState<Array<string>>([]);
@@ -31,11 +49,13 @@ export let Modal = (props: props) => {
     })
     return (
         <div className={props.className}>
-            <span onClick={()=>{cancelHandler(props.setIsModalVision,setFindStrokeText,setFilteredCities)}}>&#215;</span>
-            <div>
+            <Cancel onClick={()=>{cancelHandler(props.setIsModalVision,setFindStrokeText,setFilteredCities)}}>&#215;</Cancel>
+            <Block>
                 <FindStroke setFilteredCities={setFilteredCities} changeStrokeHandler={changeStrokeHandler} cities={props.cities} findStrokeText={findStrokeText} setFindStrokeText={setFindStrokeText}/>
-                {findStrokeText.length<2?false:citiesTitles}
-            </div>
+                <CitiesTitlesBlock>
+                    {findStrokeText.length<2?false:citiesTitles}
+                </CitiesTitlesBlock>
+            </Block>
         </div>
     )
 }

@@ -14,9 +14,45 @@ let StyledModal = styled(Modal)<{ isModalVision: boolean }>`
     top:${props => props.isModalVision ? "0vh" : "-100vh"};
     transition:top .8s ease,background-color 1s ease ;
     position:fixed;
-    background:${props => props.isModalVision ? "grey" : "none"};
+    background:${props => props.isModalVision ? "#cfcfcf" : "none"};
     width:100vw;
     height:100vh;
+`;
+export let DailyWeatherBlock=styled.div`
+    display:grid;
+    width:12.4vw;
+    margin-left:44vw;
+    justify-self:center;
+`;
+export let WeeklyWeatherBlock=styled.div`
+    display:grid;
+    grid-gap:2vw;
+    grid-template-columns:repeat(7,1fr)
+`;
+export let Titles=styled.h2`
+    text-align:center;
+    margin-bottom:5vh;
+`;
+let PickedCitiesBlock=styled.div`
+    display:grid;
+    justify-items:center;
+    grid-gap:2vw;
+    grid-template-columns:repeat(4,1fr);
+`;
+let AddCity=styled.button`
+    margin:5vh 0 3vh 0 ;
+    height:5vh;
+    width: 25vw;
+    background-color:#68e0d0;
+    color:white;
+    cursor:pointer;
+    margin-left:38vw;
+    transition:.4s ease;
+    &:hover {
+        background:none;
+        border-color:#68e0d0;
+        color:#68e0d0;
+    }
 `;
 export let Weather = (props: props) => {
     let [pickedCities, setPickedCities] = useState(() => {
@@ -31,11 +67,9 @@ export let Weather = (props: props) => {
     let [isModalVision, setIsModalVision] = useState(false);
     let history = useHistory();
     useEffect(() => {
-        console.log("da")
         if (localStorage.getItem("clientLat") !== "null" && localStorage.getItem("clientLong") !== "null") {
            let weatherOfPosition=fetch("https://api.openweathermap.org/data/2.5/onecall?lat="+localStorage.getItem("clientLat")+"&lon="+localStorage.getItem("clientLong")+"&units=metric&lang=ru&appid=aebaf3b9032ed34ea070ecc08d250e76",{method:"GET"}).then(e=>e.json());
            weatherOfPosition.then(e=>setLocationWeather(e.daily));
-
         } else {
             setLocationWeather([])
         }
@@ -62,24 +96,25 @@ export let Weather = (props: props) => {
             setPickedCities([...arr])
         }
     };
-    let weathersBlock = locationWeather.map((e,i) => {
+    let weathersBlock = locationWeather.filter((e,i)=>{return i!==0}).map((e,i) => {
         return <WeatherComponent key={i} date={e.dt} temperature={e.temp} weatherDescription={e.weather[0].description} icon={e.weather[0].icon}/>
     });
     let pickedCitiesObject = pickedCities.map((e) => {
-        return <WeatherObject history={history} pickedCities={pickedCities} setPickedCities={setPickedCities}
-                              deleteButtHandler={deleteButtHandler} historyButtHandler={historyButtHandler} key={e}
-                              city={e}/>
+        return <WeatherObject history={history} pickedCities={pickedCities} setPickedCities={setPickedCities} deleteButtHandler={deleteButtHandler} historyButtHandler={historyButtHandler} key={e} city={e}/>
     });
     return (
         <>
-        {locationWeather[0]?(<><h2>Погода в вашем городе</h2>{weathersBlock}</>):<p>Нет доступа к геолокации</p>}
-            <StyledModal cityButtHandler={cityButtHandler} cities={props.cities} setIsModalVision={setIsModalVision}
-                         isModalVision={isModalVision}/>
+            {locationWeather[0]?
+                (<><Titles>Погода в вашем городе</Titles><Titles>Сегодня</Titles><DailyWeatherBlock><WeatherComponent date={locationWeather[0].dt} temperature={locationWeather[0].temp} weatherDescription={locationWeather[0].weather[0].description} icon={locationWeather[0].weather[0].icon}/></DailyWeatherBlock><Titles>На неделю</Titles><WeeklyWeatherBlock>{weathersBlock}</WeeklyWeatherBlock></>)
+                :<p>Нет доступа к геолокации</p>}
+            <StyledModal cityButtHandler={cityButtHandler} cities={props.cities} setIsModalVision={setIsModalVision} isModalVision={isModalVision}/>
+            <hr/>
+            <Titles>Список наблюдаемых городов</Titles>
+
+            <PickedCitiesBlock>
             {pickedCitiesObject}
-            <button onClick={() => {
-                setIsModalVision(!isModalVision)
-            }}>Выбрать наблюдаемые города
-            </button>
+            </PickedCitiesBlock>
+            <AddCity onClick={() => {setIsModalVision(!isModalVision)}}>Добавить город</AddCity>
         </>
 
     )

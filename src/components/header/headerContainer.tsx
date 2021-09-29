@@ -12,7 +12,6 @@ let HeaderWrapper=(props:props)=>{
     let srces=['/',"/weather","/profile","/logout"]
     useEffect(()=>{
         let page=pages.slice();
-        console.log(pages,props.auth)
         if(page.find((e)=>{return e==="Выйти"})&&!props.auth){
             page.splice(page.length-1,1)
             setPages(page)

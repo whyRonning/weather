@@ -1,10 +1,10 @@
 import {connect, ConnectedProps} from "react-redux";
-import React, {useState} from "react";
+import React, { useState} from "react";
 import {Login} from "./login";
 import {actionCreators} from "../../store/loginReducer";
 import {GlobalState} from "../../store/store";
 import {message} from "antd";
-import { useHistory } from "react-router-dom";
+import {Redirect, useHistory } from "react-router-dom";
 let MSTP=(state:GlobalState)=>({
     login:state.loginReducer.loginData.login,
     password:state.loginReducer.loginData.password
@@ -24,9 +24,16 @@ let LoginWrapper=(props:propsType)=>{
         }
 
     };
-    return(
-        <Login buttHandler={buttHandler} login={login} setLogin={setLogin} setPassword={setPassword} password={password}/>
-    )
+    if(localStorage.getItem("auth")==="true"){
+        return(
+            <Redirect to={"/profile"}/>
+        )
+    }else{
+        return(
+            <Login buttHandler={buttHandler} login={login} setLogin={setLogin} setPassword={setPassword} password={password}/>
+        )
+    }
+
 };
 let LoginConnector=connect(MSTP,{authAC:actionCreators.authAC,checkLoginDataAC:actionCreators.checkLoginDataAC});
 type propsType=ConnectedProps<typeof LoginConnector>
