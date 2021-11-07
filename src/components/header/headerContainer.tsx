@@ -7,7 +7,7 @@ type props = ConnectedProps<typeof headerConnector>;
 let MSTP = (state: globalState) => ({
   auth: state.loginReducer.isAuth,
 });
-let headerWrapper = (props: props) => {
+let HeaderWrapper = (props: props) => {
   let [pages, setPages] = useState([
     "На главную",
     "Погода по городам",
@@ -41,4 +41,4 @@ let headerWrapper = (props: props) => {
   return <Header titleOfHeader={titleOfHeader} />;
 };
 let headerConnector = connect(MSTP);
-export let HeaderContainer = headerConnector(headerWrapper);
+export let HeaderContainer = headerConnector(HeaderWrapper);

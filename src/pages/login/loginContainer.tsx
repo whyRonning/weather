@@ -9,7 +9,7 @@ let MSTP = (state: globalState) => ({
   login: state.loginReducer.loginData.login,
   password: state.loginReducer.loginData.password,
 });
-let loginWrapper = (props: propsType) => {
+let LoginWrapper = (props: propsType) => {
   let [login, setLogin] = useState("");
   let [password, setPassword] = useState("");
   let history = useHistory();
@@ -41,4 +41,4 @@ let LoginConnector = connect(MSTP, {
   checkLoginDataAC: actionCreators.checkLoginDataAC,
 });
 type propsType = ConnectedProps<typeof LoginConnector>;
-export let LoginContainer = LoginConnector(loginWrapper);
+export let LoginContainer = LoginConnector(LoginWrapper);

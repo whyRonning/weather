@@ -4,7 +4,7 @@ import { useHistory, withRouter } from "react-router-dom";
 import React from "react";
 import { CityWeatherComponent } from "../../components/weatherInCity/cityWeatherComponent";
 import { message } from "antd";
-let cityWeatherWrapper = (props: any) => {
+let CityWeatherWrapper = (props: any) => {
   let [weather, setWeather] = useState<Array<any>>([]);
   let history = useHistory();
   useEffect(() => {
@@ -80,4 +80,4 @@ let cityWeatherWrapper = (props: any) => {
     </>
   );
 };
-export let CityWeatherContainer = withRouter(cityWeatherWrapper);
+export let CityWeatherContainer = withRouter(CityWeatherWrapper);
